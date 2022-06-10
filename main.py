@@ -109,10 +109,9 @@ async def countdown(msg: Message):
 
 
 # 幸运值
-# invoke this via saying `!roll 1 100` in channel
-# or `/xyz 1 100 5` to dice 5 times once
-@bot.command()
-async def xyz(msg: Message, custom: int = 100):  # 幸运值
+# `/xyz 1 100` to dice 5 times once
+@bot.command(regex=r'(?:\.|\/|。|!)(?:xyz|幸运值|我的xyz)')
+async def xyz(msg: Message):  # 幸运值
     result = [random.randint(0, 100) for i in range(1)]
     time_now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     log_msg = f"[{time_now}] {msg.author.username}#{msg.author.identify_num} 查询幸运值 \n[{time_now}] 返回幸运值 {result} 给{msg.author.username}#{msg.author.identify_num}"
@@ -120,7 +119,7 @@ async def xyz(msg: Message, custom: int = 100):  # 幸运值
     await msg.reply(f'你的幸运值是: {result}')
 
 
-@bot.command(regex=r'(?:\.|\/|。)(?:查服|find|fs)(.+)')
+@bot.command(regex=r'(?:\.|\/|。|!)(?:查服|find|fs)(.+)')
 async def look(msg: Message, d: str = ''):
     if d.startswith(' '):
         await check(msg, d[1:], '')
