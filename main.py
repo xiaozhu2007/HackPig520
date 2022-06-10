@@ -24,6 +24,7 @@ import time
 from khl import Bot, Message, Cert
 from khl.card import Card, Types, Module, CardMessage, Element
 
+
 # 解法来自于知乎用户 @曲晋云 在 https://zhuanlan.zhihu.com/p/37608401 评论区内的回答
 class Solution:
     solutions = set()
@@ -35,12 +36,21 @@ class Solution:
         else:
             for i in range(len(numbers)):
                 for j in range(i + 1, len(numbers)):
-                    rest_numbers = [x for p, x in enumerate(numbers) if p != i and p != j]
+                    rest_numbers = [
+                        x for p, x in enumerate(numbers) if p != i and p != j
+                    ]
                     for op in "+-*/":
                         if op in "+-*" or eval(str(numbers[j])) != 0:
-                            self.point24(["(" + str(numbers[i]) + op + str(numbers[j]) + ")"] + rest_numbers)
-                        if op == "-" or (op == "/" and eval(str(numbers[i])) != 0):
-                            self.point24(["(" + str(numbers[j]) + op + str(numbers[i]) + ")"] + rest_numbers)
+                            self.point24([
+                                "(" + str(numbers[i]) + op + str(numbers[j]) +
+                                ")"
+                            ] + rest_numbers)
+                        if op == "-" or (op == "/"
+                                         and eval(str(numbers[i])) != 0):
+                            self.point24([
+                                "(" + str(numbers[j]) + op + str(numbers[i]) +
+                                ")"
+                            ] + rest_numbers)
 
     def clear(self):
         self.solutions.clear()
@@ -66,6 +76,7 @@ class Solution:
 
 cache = {}
 solution_object = Solution()
+
 
 # register command, send `/hello` in channel to invoke
 @bot.command(name='hello')
@@ -110,7 +121,7 @@ async def countdown(msg: Message):
 
 # 幸运值
 # `/xyz 1 100` to dice 5 times once
-@bot.command(regex=r'(?:\.|\/|。|!)(?:xyz|幸运值|我的xyz)')
+@bot.command(regex=r'(?:\.|\/|。|!|！)(?:xyz|幸运值|我的xyz)')
 async def xyz(msg: Message):  # 幸运值
     result = [random.randint(0, 100) for i in range(1)]
     time_now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -213,7 +224,6 @@ async def check(msg: Message, name: str = '', game: str = ''):
                 await msg.reply(CardMessage(c))
 
 
-
 @bot.command(regex=r'(?:24点)')
 async def twenty_four_init(msg: Message):
     global cache
@@ -226,9 +236,15 @@ async def twenty_four_init(msg: Message):
             solution.point24(cards)
             if solution.is_have_answer():
                 break
-        cache[cache_id] = {'cards': cards, 'time': time.time(), 'answer': solution.get_answer_top5_text()}
+        cache[cache_id] = {
+            'cards': cards,
+            'time': time.time(),
+            'answer': solution.get_answer_top5_text()
+        }
         del solution
-        await msg.reply(f'来一把紧张刺激的 24 点！输入算式进行推导，输入「24退出」结束游戏\n(met){msg.author_id}(met) 现在你手上有：{cards}，怎么凑 24 点呢？')
+        await msg.reply(
+            f'来一把紧张刺激的 24 点！输入算式进行推导，输入「24退出」结束游戏\n(met){msg.author_id}(met) 现在你手上有：{cards}，怎么凑 24 点呢？'
+        )
     else:
         await msg.reply(f'24点游戏还没结束哦~')
 
@@ -289,8 +305,9 @@ async def add_list(user_id, time_used):
             data[user_id] = time_used
         elif len(data) < 10 and (user_id not in data):
             data[user_id] = time_used
-        elif float(time_used) < float(data[list(data.keys())[len(data)-1]]):
-            if user_id not in data or (user_id in data and float(time_used) < float(data[user_id])):
+        elif float(time_used) < float(data[list(data.keys())[len(data) - 1]]):
+            if user_id not in data or (user_id in data and float(time_used) <
+                                       float(data[user_id])):
                 data[user_id] = time_used
         data = dict(sorted(data.items(), key=lambda x: float(x[1])))
         if len(data) > 10:
@@ -322,7 +339,9 @@ async def twenty_four_list(msg: Message):
         text = ''
         count = 1
         for k, v in d.items():
-            user = await msg.gate.request('GET', 'user/view', params={'user_id': k})
+            user = await msg.gate.request('GET',
+                                          'user/view',
+                                          params={'user_id': k})
             name = f"{user['username']}#{user['identify_num']}"
             text += f'第{count}: {name} 用时: {v}s\n'
             count += 1
