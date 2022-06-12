@@ -13,6 +13,7 @@ from khl.command import Rule
 # Init Bot
 bot = Bot(token=os.environ['BOT_TOKEN'])
 
+
 # register command, send `/hello` in channel to invoke
 @bot.command(name='hello')
 async def world(msg: Message):
@@ -158,8 +159,11 @@ async def check(msg: Message, name: str = '', game: str = ''):
                     count += 1
                 await msg.reply(CardMessage(c))
 
+
 @bot.command(regex=r'(?:\.|\/|。|!|！)(?:gq|放歌|点歌)')
-async def music(msg: Message, src: str, img: str = 'https://s1.ax1x.com/2022/06/12/X2SPLn.png'):
+async def music(msg: Message,
+                src: str,
+                img: str = 'https://s1.ax1x.com/2022/06/12/X2SPLn.png'):
     await msg.reply(
         CardMessage(
             Card(
@@ -169,12 +173,13 @@ async def music(msg: Message, src: str, img: str = 'https://s1.ax1x.com/2022/06/
                 Module.Section(
                     '查看实现源码',
                     # LINK type: user will open the link in browser when clicked
-                    Element.Button('Here', 'https://github.com/TWT233/khl.py', Types.Click.LINK)))))
+                    Element.Button('Here', 'https://github.com/TWT233/khl.py',
+                                   Types.Click.LINK)))))
 
 
 @bot.on_event(EventTypes.MESSAGE_BTN_CLICK)
 async def print_btn_value(_: Bot, e: Event):
-    await msg.reply(f'''{e.body['user_info']['nickname']} 选择了 {e.body['value']} ！''')
     print(f'''{e.body['user_info']['nickname']} 选择了 {e.body['value']}''')
+
 
 bot.run()
