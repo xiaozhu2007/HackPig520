@@ -10,20 +10,8 @@ from khl import Bot, Message, EventTypes, Event
 from khl.card import CardMessage, Card, Module, Element, Types
 from khl.command import Rule
 
-# init Bot
+# Init Bot
 bot = Bot(token=os.environ['BOT_TOKEN'])
-
-# -*- encoding : utf-8 -*-
-import copy
-import json
-import os
-import random
-import re
-import time
-
-from khl import Bot, Message, Cert
-from khl.card import Card, Types, Module, CardMessage, Element
-
 
 # register command, send `/hello` in channel to invoke
 @bot.command(name='hello')
